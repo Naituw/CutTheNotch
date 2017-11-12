@@ -7,13 +7,10 @@
 //
 
 #import "ViewController.h"
+#import "Preferences.h"
 #import <AVFoundation/AVFoundation.h>
 
-// set to 1 when you want to create your own launch.mov
-// use QuickTimePlayer - File - New Video Recording
-#define RECORD_MODE 0
-
-@interface ViewController ()
+@interface ViewController () <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *button;
 @property (nonatomic, strong) UIImageView * statusBarView;
@@ -22,6 +19,7 @@
 
 @property (nonatomic, strong) AVPlayerLayer * playerLayer;
 @property (nonatomic, strong) UIControl * startPlayButton;
+@property (nonatomic, strong) UIPanGestureRecognizer * panGesture;
 
 @end
 
@@ -31,62 +29,94 @@
 {
     [super viewDidLoad];
     
-    self.title = @"HideNotch Demo";
+    self.title = @"Cut The Notch";
     
-#if RECORD_MODE
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-#else
-    [UIApplication sharedApplication].keyWindow.transform = CGAffineTransformMakeRotation(M_PI);
+    if ([Preferences recordModeEnabled]) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    } else {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    }
     
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-#endif
-    
+    self.button.layer.cornerRadius = 8.0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (![Preferences recordModeEnabled]) {
+        UIWindow * window = [UIApplication sharedApplication].keyWindow;
+        
+        [window addSubview:self.statusBarView];
+        [window.layer addSublayer:self.playerLayer];
+        [window addSubview:self.notchView];
+        [window addSubview:self.startPlayButton];
+        [self.view setUserInteractionEnabled:NO];
+        
+        _showsNotch = YES;
+        
+        [self.view setNeedsLayout];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [_statusBarView removeFromSuperview];
+    [_playerLayer removeFromSuperlayer];
+    [_notchView removeFromSuperview];
+    [_startPlayButton removeFromSuperview];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-#if !RECORD_MODE
-    [self.view.window addSubview:self.statusBarView];
-    [self.view.window.layer addSublayer:self.playerLayer];
-    [self.view.window addSubview:self.notchView];
-    [self.view.window addSubview:self.startPlayButton];
-    [self.view setUserInteractionEnabled:NO];
-    
-    _showsNotch = YES;
-    
-    [self.view setNeedsLayout];
-#endif
 }
 
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    
     UIWindow * window = self.view.window;
     CGPoint center = CGPointMake(CGRectGetMidX(window.bounds), CGRectGetMidY(window.bounds));
     _button.center = [self.view convertPoint:center fromView:window];
     
-    CGSize notchSize = _notchView.image.size;
-    _notchView.frame = CGRectMake((self.view.bounds.size.width - notchSize.width) / 2, 0, notchSize.width, notchSize.height);
+    if (_panGesture.state != UIGestureRecognizerStateChanged) {
+        _notchView.frame = [self notchDefaultFrame];
+    }
     CGSize statusBarSize = _statusBarView.image.size;
     _statusBarView.frame = CGRectMake(0, 0, self.view.bounds.size.width, statusBarSize.height);
     _playerLayer.frame = CGRectInset(self.view.bounds, 0, -1.0/3);
-    _startPlayButton.frame = self.view.bounds;
+    
+    CGRect startPlayButtonFrame = self.view.bounds;
+    startPlayButtonFrame.size.height -= 60;
+    _startPlayButton.frame = startPlayButtonFrame;
+    
+    [CATransaction commit];
+}
+
+- (CGRect)notchDefaultFrame
+{
+    CGSize notchSize = _notchView.image.size;
+    return CGRectMake((self.view.bounds.size.width - notchSize.width) / 2, _showsNotch ? 0 : -notchSize.height, notchSize.width, notchSize.height);
 }
 
 - (UIImageView *)notchView
 {
     if (!_notchView) {
         _notchView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notch.png"]];
+        _notchView.userInteractionEnabled = YES;
+        _notchView.layer.anchorPoint = CGPointMake(0.5, 0);
+        
+        _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+        _panGesture.delegate = self;
+        
+        [_notchView addGestureRecognizer:_panGesture];
     }
     return _notchView;
 }
@@ -94,7 +124,7 @@
 - (UIImageView *)statusBarView
 {
     if (!_statusBarView) {
-        _statusBarView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"statusbar.png"]];
+        _statusBarView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navigationbar.png"]];
     }
     return _statusBarView;
 }
@@ -102,9 +132,11 @@
 - (AVPlayerLayer *)playerLayer
 {
     if (!_playerLayer) {
-        AVPlayer * player = [AVPlayer playerWithURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"launch" ofType:@"mov"]]];
+        NSURL * url = _videoURL ? : [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"launch" ofType:@"mov"]];
+        AVPlayer * player = [AVPlayer playerWithURL:url];
         _playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
         _playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        _playerLayer.backgroundColor = [UIColor blackColor].CGColor;
     }
     return _playerLayer;
 }
@@ -126,8 +158,8 @@
         
         [_button setTitle:showsNotch ? @"Hide" : @"Show" forState:UIControlStateNormal];
         
-        [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction animations:^{
-            _notchView.alpha = showsNotch ? 1.0 : 0.0;
+        [UIView animateWithDuration:0.16 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction animations:^{
+            _notchView.frame = [self notchDefaultFrame];
         } completion:NULL];
     }
 }
@@ -153,19 +185,72 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
 }
 
-// Didn't find a way to completly hide homeIndicator
-// Use pan instead of tap when demosrating, so the indicator won't appear
-- (BOOL)prefersHomeIndicatorAutoHidden
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
+    CGPoint translation = [_panGesture translationInView:_notchView];
+    if (ABS(translation.x) > ABS(translation.y)) {
+        return NO;
+    }
+    if (translation.y < 0) {
+        return NO;
+    }
     return YES;
 }
 
-#if !RECORD_MODE
+- (void)panGestureRecognized:(UIPanGestureRecognizer *)gesture
+{
+    switch (gesture.state) {
+        case UIGestureRecognizerStateBegan: {
+        }
+            break;
+        case UIGestureRecognizerStateChanged: {
+            CGFloat notchHeight = _notchView.image.size.height;
+            CGFloat targetHeight = notchHeight + [gesture translationInView:self.view].y / 2;
+            _notchView.transform = CGAffineTransformMakeScale(1, targetHeight / notchHeight);
+        }
+            break;
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateEnded: {
+            [UIView animateWithDuration:0.25 delay:0.0 usingSpringWithDamping:0.7 initialSpringVelocity:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+                _notchView.transform = CGAffineTransformIdentity;
+            } completion:NULL];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (UIRectEdge)preferredScreenEdgesDeferringSystemGestures
+{
+    return UIRectEdgeAll;
+}
+
 - (BOOL)prefersStatusBarHidden
 {
-    return YES;
+    if ([Preferences recordModeEnabled]) {
+        return NO;
+    } else {
+        return YES;
+    }
 }
-#endif
+
+@end
+
+@interface UIViewController (Orientation)
+
+@end
+
+@implementation UIViewController (Orientation)
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    if ([Preferences recordModeEnabled]) {
+        return UIInterfaceOrientationMaskPortrait;
+    } else {
+        return UIInterfaceOrientationMaskLandscapeLeft;
+    }
+}
 
 @end
 

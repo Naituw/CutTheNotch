@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>StringsTable</key>
+	<string>Root</string>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Record Mode</string>
+			<key>Key</key>
+			<string>record_mode_enabled</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string></string>
+			<key>FooterText</key>
+			<string>Record Mode let you create your own version of Cut the Notch launch video easily: 1. QuickTimePlayer on your Mac, Select &quot;File&quot; - &quot;New Video Recording&quot;; 2. Record a video clip when you launch &quot;Cut The Notch&quot;; 3. Trim the clip and Airdrop the your iPhone</string>
+		</dict>
+	</array>
+</dict>
+</plist>

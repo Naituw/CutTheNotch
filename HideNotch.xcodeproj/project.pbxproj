@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C618F54B1FB808550056E4F4 /* LaunchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C618F54A1FB808550056E4F4 /* LaunchViewController.m */; };
+		C618F54E1FB8155C0056E4F4 /* NotCapableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C618F54D1FB8155C0056E4F4 /* NotCapableViewController.m */; };
+		C618F5501FB818530056E4F4 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C618F54F1FB818530056E4F4 /* Settings.bundle */; };
+		C618F5531FB818D20056E4F4 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = C618F5521FB818D20056E4F4 /* Preferences.m */; };
+		C65564711FB7659900FBE049 /* navigationbar@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C65564701FB7659800FBE049 /* navigationbar@3x.png */; };
 		C6ACA5BF1FB55444001D43A2 /* notch@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C6ACA5BE1FB55444001D43A2 /* notch@3x.png */; };
 		C6ACA5C11FB5819D001D43A2 /* launch.mov in Resources */ = {isa = PBXBuildFile; fileRef = C6ACA5C01FB5819D001D43A2 /* launch.mov */; };
 		C6ACA5C31FB583A6001D43A2 /* statusbar@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C6ACA5C21FB583A5001D43A2 /* statusbar@3x.png */; };
@@ -19,6 +24,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C618F5491FB808550056E4F4 /* LaunchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LaunchViewController.h; sourceTree = "<group>"; };
+		C618F54A1FB808550056E4F4 /* LaunchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LaunchViewController.m; sourceTree = "<group>"; };
+		C618F54C1FB8155C0056E4F4 /* NotCapableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotCapableViewController.h; sourceTree = "<group>"; };
+		C618F54D1FB8155C0056E4F4 /* NotCapableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotCapableViewController.m; sourceTree = "<group>"; };
+		C618F54F1FB818530056E4F4 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		C618F5511FB818D20056E4F4 /* Preferences.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
+		C618F5521FB818D20056E4F4 /* Preferences.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
+		C618F5541FB825A70056E4F4 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		C65564701FB7659800FBE049 /* navigationbar@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigationbar@3x.png"; sourceTree = "<group>"; };
 		C6ACA5BE1FB55444001D43A2 /* notch@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notch@3x.png"; sourceTree = "<group>"; };
 		C6ACA5C01FB5819D001D43A2 /* launch.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = launch.mov; sourceTree = "<group>"; };
 		C6ACA5C21FB583A5001D43A2 /* statusbar@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "statusbar@3x.png"; sourceTree = "<group>"; };
@@ -50,6 +64,7 @@
 		C6ACA5C41FB586E8001D43A2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C618F5541FB825A70056E4F4 /* MobileCoreServices.framework */,
 				C6ACA5C61FB586F1001D43A2 /* AVFoundation.framework */,
 				C6ACA5C51FB586E8001D43A2 /* AVKit.framework */,
 			);
@@ -76,18 +91,26 @@
 		C6EC097C1FB54AF20028596C /* HideNotch */ = {
 			isa = PBXGroup;
 			children = (
+				C65564701FB7659800FBE049 /* navigationbar@3x.png */,
 				C6ACA5C21FB583A5001D43A2 /* statusbar@3x.png */,
 				C6ACA5C01FB5819D001D43A2 /* launch.mov */,
 				C6ACA5BE1FB55444001D43A2 /* notch@3x.png */,
+				C618F5511FB818D20056E4F4 /* Preferences.h */,
+				C618F5521FB818D20056E4F4 /* Preferences.m */,
 				C6EC097D1FB54AF20028596C /* AppDelegate.h */,
 				C6EC097E1FB54AF20028596C /* AppDelegate.m */,
 				C6EC09801FB54AF20028596C /* ViewController.h */,
 				C6EC09811FB54AF20028596C /* ViewController.m */,
+				C618F5491FB808550056E4F4 /* LaunchViewController.h */,
+				C618F54A1FB808550056E4F4 /* LaunchViewController.m */,
+				C618F54C1FB8155C0056E4F4 /* NotCapableViewController.h */,
+				C618F54D1FB8155C0056E4F4 /* NotCapableViewController.m */,
 				C6EC09831FB54AF20028596C /* Main.storyboard */,
 				C6EC09861FB54AF20028596C /* Assets.xcassets */,
 				C6EC09881FB54AF20028596C /* LaunchScreen.storyboard */,
 				C6EC098B1FB54AF20028596C /* Info.plist */,
 				C6EC098C1FB54AF20028596C /* main.m */,
+				C618F54F1FB818530056E4F4 /* Settings.bundle */,
 			);
 			path = HideNotch;
 			sourceTree = "<group>";
@@ -150,10 +173,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C618F5501FB818530056E4F4 /* Settings.bundle in Resources */,
 				C6EC098A1FB54AF20028596C /* LaunchScreen.storyboard in Resources */,
 				C6ACA5C11FB5819D001D43A2 /* launch.mov in Resources */,
 				C6EC09871FB54AF20028596C /* Assets.xcassets in Resources */,
 				C6ACA5C31FB583A6001D43A2 /* statusbar@3x.png in Resources */,
+				C65564711FB7659900FBE049 /* navigationbar@3x.png in Resources */,
 				C6ACA5BF1FB55444001D43A2 /* notch@3x.png in Resources */,
 				C6EC09851FB54AF20028596C /* Main.storyboard in Resources */,
 			);
@@ -168,7 +193,10 @@
 			files = (
 				C6EC09821FB54AF20028596C /* ViewController.m in Sources */,
 				C6EC098D1FB54AF20028596C /* main.m in Sources */,
+				C618F5531FB818D20056E4F4 /* Preferences.m in Sources */,
+				C618F54E1FB8155C0056E4F4 /* NotCapableViewController.m in Sources */,
 				C6EC097F1FB54AF20028596C /* AppDelegate.m in Sources */,
+				C618F54B1FB808550056E4F4 /* LaunchViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,9 +335,9 @@
 				INFOPLIST_FILE = HideNotch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.weibo.HideNotch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wutian.hidenotch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -322,9 +350,9 @@
 				INFOPLIST_FILE = HideNotch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.weibo.HideNotch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wutian.hidenotch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

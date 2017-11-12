@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "Preferences.h"
 
 @interface AppDelegate ()
 
@@ -14,8 +15,19 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    if (![Preferences recordModeEnabled]) {
+        if (_window.safeAreaInsets.top < 44) {
+            _window.transform = CGAffineTransformMakeRotation(M_PI / 2);
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            _window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"NotCapable"];
+        } else {
+            _window.transform = CGAffineTransformMakeRotation(-M_PI / 2);
+        }
+    } else {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        _window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[storyboard instantiateViewControllerWithIdentifier:@"ViewController"]];
+    }
     return YES;
 }
 
@@ -27,8 +39,11 @@
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    if (![Preferences recordModeEnabled]) {
+        if (_window.rootViewController.presentedViewController) {
+            [_window.rootViewController dismissViewControllerAnimated:NO completion:NULL];
+        }
+    }
 }
 
 
@@ -38,7 +53,17 @@
 
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    if ([Preferences recordModeEnabled] != [[NSUserDefaults standardUserDefaults] boolForKey:@"record_mode_enabled"]) {
+        UIViewController * viewController = self.window.rootViewController;
+        while (viewController.presentedViewController) {
+            viewController = viewController.presentedViewController;
+        }
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Restart Required" message:[NSString stringWithFormat:@"You've %@ the Record Mode, Press \"Exit\" and relaunch to take effect", [Preferences recordModeEnabled] ? @"disabled" : @"enabled"] preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Exit" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            exit(0);
+        }]];
+        [viewController presentViewController:alert animated:YES completion:NULL];
+    }
 }
 
 
