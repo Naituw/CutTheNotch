@@ -7,6 +7,7 @@
 //
 
 #import "Preferences.h"
+#import <UIKit/UIKit.h>
 
 @implementation Preferences
 
@@ -18,6 +19,16 @@
         enabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"record_mode_enabled"];
     });
     return enabled;
+}
+
++ (BOOL)deviceNotCapable
+{
+    static BOOL capable = NO;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        capable = [UIApplication sharedApplication].windows.firstObject.safeAreaInsets.top >= 44;
+    });
+    return !capable;
 }
 
 @end

@@ -17,8 +17,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     if (![Preferences recordModeEnabled]) {
-        if (_window.safeAreaInsets.top < 44) {
-            _window.transform = CGAffineTransformMakeRotation(M_PI / 2);
+        if ([Preferences deviceNotCapable]) {
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
             _window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"NotCapable"];
         } else {

@@ -31,7 +31,7 @@
     
     self.title = @"Cut The Notch";
     
-    if ([Preferences recordModeEnabled]) {
+    if ([Preferences recordModeEnabled] || [Preferences deviceNotCapable]) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
     } else {
@@ -49,11 +49,16 @@
     if (![Preferences recordModeEnabled]) {
         UIWindow * window = [UIApplication sharedApplication].keyWindow;
         
-        [window addSubview:self.statusBarView];
-        [window.layer addSublayer:self.playerLayer];
+        if (![Preferences deviceNotCapable]) {
+            [window addSubview:self.statusBarView];
+            [window.layer addSublayer:self.playerLayer];
+        }
         [window addSubview:self.notchView];
-        [window addSubview:self.startPlayButton];
-        [self.view setUserInteractionEnabled:NO];
+        
+        if (![Preferences deviceNotCapable]) {
+            [window addSubview:self.startPlayButton];
+            [self.view setUserInteractionEnabled:NO];
+        }
         
         _showsNotch = YES;
         
@@ -245,7 +250,7 @@
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    if ([Preferences recordModeEnabled]) {
+    if ([Preferences recordModeEnabled] || [Preferences deviceNotCapable]) {
         return UIInterfaceOrientationMaskPortrait;
     } else {
         return UIInterfaceOrientationMaskLandscapeLeft;

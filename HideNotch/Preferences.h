@@ -11,5 +11,6 @@
 @interface Preferences : NSObject
 
 + (BOOL)recordModeEnabled;
++ (BOOL)deviceNotCapable;
 
 @end
