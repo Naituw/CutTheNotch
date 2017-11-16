@@ -6,6 +6,12 @@ This app helps your create an illusion that you can hide the iPhone X notch
 
 ![](demo.gif)
 
+## Trick Steps
+
+- App will show a fake "notch" on the bottom of the screen
+- Hold the phone upside down, and hide the real notch with your fingers
+- By pressing the "Hide/Show" button, the fake "notch" hides and shows
+
 ## App Store ?
 
 I've already tried submit this app to AppStore, but get rejected at the end:
